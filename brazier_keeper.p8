@@ -8,12 +8,14 @@ function _init()
 	palt(14,true)
 	
 	fp_init()
+	em_init()
 	
 end
 
 function _update()
 
 	fp_update()
+	em_update()
 end
 
 function _draw()
@@ -23,6 +25,7 @@ function _draw()
 	spr(5,47,64,4,4)
 	fp_draw()
 	spr(1,47,63,4,4)
+	em_draw()
 
 end
 -->8
@@ -98,6 +101,89 @@ function fp_draw()
 		circfill(p.x,p.y,p.r,p.c)
 	end
 
+end
+-->8
+-- ember functions
+function em_init()
+
+	-- storage for embers
+	embers={}
+	
+	emtimer=30
+
+end
+
+function em_update()
+
+	emtimer=emtimer-1
+	
+	if emtimer<0 then		
+		add(embers,{
+			-- position and colour
+			x=57,
+			y=80,
+			c=9,
+			-- movement
+			spdy=1,
+			spdx=rnd(0.5)+0.05,
+			dir=rnd(2),
+			-- floor logic
+			onflr=false,
+			flrtime=0,
+			-- state
+			falling=false
+		})
+		
+		-- delay for ember spawn
+		emtimer=20
+	end
+	
+	for e in all(embers) do
+
+		if not e.onflr then
+
+			e.y-=e.spdy
+			
+			-- determine direction of ember
+			if flr(e.dir)==1 then
+				e.x-=e.spdx
+			else
+				e.x+=e.spdx
+			end
+			
+			if	not e.falling and e.y<=rnd(40)+10 then
+				e.falling=true
+				e.spdy=-e.spdy
+			end
+			
+			if e.y>=94 then
+				e.y=94	
+				e.spdx=0
+				e.spdy=0
+				e.onflr=true
+				e.flrtime=90
+			end
+			
+		else
+			
+			e.flrtime-=1
+			
+			if e.flrtime<=30 then
+				e.c=1
+			end
+			
+			if e.flrtime<=0 then
+				del(embers,e)
+			end
+		end
+	end
+end
+
+function em_draw()
+	
+	for e in all(embers) do
+		circfill(e.x,e.y,1,e.c)
+	end
 end
 __gfx__
 00000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee00000000000000000000000000000000000000000000000000000000
