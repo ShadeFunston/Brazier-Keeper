@@ -14,6 +14,8 @@ function _init()
 	em_init()
 	pt_init()
 	
+	score=0
+	
 end
 
 function _update()
@@ -32,6 +34,8 @@ function _draw()
 	spr(1,47,63,4,4)
 	em_draw()
 	pt_draw()
+	
+	print("score:"..score,4,4,7)
 
 end
 -->8
@@ -217,12 +221,25 @@ function pt_update()
 
 	pointer.x=stat(32)
 	pointer.y=stat(33)
+	
+	for e in all(embers) do
+	
+		if e.onflr and em_pt_col(e) then
+			score+=1
+			del(embers,e)
+		end
+	end
 
 end
 
 function pt_draw()
 	spr(9,pointer.x,pointer.y,2,2)
-end	
+end
+
+function em_pt_col(e)
+	
+	return e.x<pointer.x+16 and e.x+8>pointer.x and e.y<pointer.y+16 and e.y+8>pointer.y
+end
 __gfx__
 00000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000
 00000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee444444444440000000000000000000000000000000000000000
@@ -231,7 +248,7 @@ __gfx__
 00077000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeffffff92444224420000000000000000000000000000000000000000
 00700700eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefefef9224444442e0000000000000000000000000000000000000000
 00000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef924444222ee0000000000000000000000000000000000000000
-00000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefe442222eeeee0000000000000000000000000000000000000000
+00000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefe244222eeeee0000000000000000000000000000000000000000
 00000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000
 00000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000
 00000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000000000000000000000
